@@ -18,8 +18,7 @@
     "build": "react-scripts build",
     "test": "react-scripts test",
     "eject": "react-scripts eject",
-    "postinstall": "(cd functions && yarn install) && yarn createfirebaseconfig",
-    "createfirebaseconfig": "firebase setup:web --json > ./src/firebase-config.json"
+    "postinstall": "(cd functions && yarn install)"
   },
   "eslintConfig": {
     "extends": "react-app"
