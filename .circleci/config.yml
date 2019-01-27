@@ -20,8 +20,13 @@ jobs:
             - node_modules
           key: yarn-packages-{{ checksum "yarn.lock" }}
       - run:
-          name: Run Tests
-          command: yarn test
+          name: Run Coverage
+          command: mkdir /tmp/reports && JEST_JUNIT_OUTPUT="/tmp/reports/test-report.xml" yarn test --ci --coverage --testResultsProcessor="jest-junit"
+      - store_test_results:
+          path: /tmp/reports
+      - run:
+          name: Run Tests - Jest
+          command: yarn test --bail --ci
       - run:
           name: Build Project
           command: yarn build

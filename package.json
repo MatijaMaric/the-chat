@@ -31,6 +31,8 @@
     "not op_mini all"
   ],
   "devDependencies": {
-    "firebase-tools": "^6.3.0"
+    "firebase-tools": "^6.3.0",
+    "jest-cli": "^24.0.0",
+    "jest-junit": "^6.1.0"
   }
 }
