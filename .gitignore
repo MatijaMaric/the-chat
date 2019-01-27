@@ -24,7 +24,6 @@ yarn-error.log*
 
 # firebase
 **/node_modules/*
-**/.firebaserc
 
 # firebase patch
 .runtimeconfig.json
