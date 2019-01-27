@@ -25,6 +25,8 @@ jobs:
       - run:
           name: Build Project
           command: yarn build
-      - run:
+      - deploy:
           name: Deploy to Firebase
-          command: "./node_modules/.bin/firebase deploy --token=$FIREBASE_TOKEN"
+          command: if [ "${CIRCLE_BRANCH}" == "master" ]; then
+            "./node_modules/.bin/firebase deploy --token=$FIREBASE_TOKEN"
+            fi
