@@ -11,11 +11,12 @@ export function configureStore(initialState?: RootState): Store<RootState> {
     middlewares.push(logger);
   }
 
-  const store = createStore(
-    rootReducer,
-    initialState,
-    composeWithDevTools(applyMiddleware(...middlewares))
-  );
+  let enchancers = applyMiddleware(...middlewares);
+  if (process.env.NODE_ENV !== "production") {
+    enchancers = composeWithDevTools(enchancers);
+  }
+
+  const store = createStore(rootReducer, initialState, enchancers);
 
   return store;
 }
