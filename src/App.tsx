@@ -1,28 +1,44 @@
-import React, { Component } from 'react';
-import logo from './logo.svg';
-import './App.css';
+import React from "react";
+import "./App.css";
+import { RootState, RootAction } from "./store";
+import { connect } from "react-redux";
+import { Dispatch } from "redux";
+import { initializeApp } from "./store/app/actions";
 
-class App extends Component {
+export interface AppStateProps {
+  test: string;
+}
+
+export interface AppDispatchProps {
+  initializeApp(): void;
+}
+
+export interface AppProps {}
+
+function mapStateToProps(state: RootState): AppStateProps {
+  return {
+    test: state.app.test
+  };
+}
+
+function mapDispatchToProps(dispatch: Dispatch<RootAction>): AppDispatchProps {
+  return {
+    initializeApp: () => dispatch(initializeApp())
+  };
+}
+
+class App extends React.Component<AppProps & AppStateProps & AppDispatchProps> {
   render() {
     return (
-      <div className="App">
-        <header className="App-header">
-          <img src={logo} className="App-logo" alt="logo" />
-          <p>
-            Edit <code>src/App.tsx</code> and save to reload.
-          </p>
-          <a
-            className="App-link"
-            href="https://reactjs.org"
-            target="_blank"
-            rel="noopener noreferrer"
-          >
-            Learn React
-          </a>
-        </header>
+      <div className="App" onClick={this.props.initializeApp}>
+        {this.props.test}
       </div>
     );
   }
 }
 
-export default App;
+const appContainer = connect(
+  mapStateToProps,
+  mapDispatchToProps
+)(App);
+export { appContainer as App };
