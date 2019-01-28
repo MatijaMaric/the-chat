@@ -1,7 +1,7 @@
 import { AppState, AppAction } from "./types";
 import { Reducer } from "redux";
 import { getType } from "typesafe-actions";
-import { initializeApp } from "./actions";
+import { initializeApp, setAuthState } from "./actions";
 
 const initialState: AppState = {
   isAuthenticated: false
@@ -12,6 +12,13 @@ const reducer: Reducer<AppState, AppAction> = (
   action
 ) => {
   switch (action.type) {
+    case getType(setAuthState):
+      return {
+        ...state,
+        isAuthenticated: action.payload.isAuthenticated,
+        displayName: action.payload.displayName,
+        avatarURL: action.payload.photoURL
+      };
     default:
       return state;
   }

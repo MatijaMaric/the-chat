@@ -1,32 +1,48 @@
-import React, { useReducer } from "react";
-import TextField from "@material-ui/core/TextField";
-import { emailRegex } from "../../common/regex";
+import React from "react";
 
 import "./LoginScreen.scss";
 import StyledFirebaseAuth from "react-firebaseui/StyledFirebaseAuth";
 import firebase from "../../firebase";
 import Button from "@material-ui/core/Button";
+import { Dispatch } from "redux";
+import { RootAction } from "../../store";
+import { setAuthState } from "../../store/app/actions";
+import { User } from "../../common/models";
+import { connect } from "react-redux";
 
 export interface LoginScreenProps {}
 
-export interface LoginScreenState {
-  isSignedIn: boolean;
+export interface LoginScreenDispatchProps {
+  setAuthState(user: User): void;
 }
 
-class LoginScreen extends React.Component<LoginScreenProps, LoginScreenState> {
-  private unregisterAuthObserver: firebase.Unsubscribe = () => null;
+function mapDispatchToProps(
+  dispatch: Dispatch<RootAction>
+): LoginScreenDispatchProps {
+  return {
+    setAuthState: user => dispatch(setAuthState(user))
+  };
+}
 
-  public constructor(props: LoginScreenProps) {
-    super(props);
-    this.state = {
-      isSignedIn: false
-    };
-  }
+class LoginScreen extends React.Component<
+  LoginScreenProps & LoginScreenDispatchProps
+> {
+  private unregisterAuthObserver: firebase.Unsubscribe = () => null;
 
   public componentDidMount() {
     this.unregisterAuthObserver = firebase
       .auth()
-      .onAuthStateChanged(user => this.setState({ isSignedIn: !!user }));
+      .onAuthStateChanged(user => this._handleAuthChanged(user));
+  }
+
+  private _handleAuthChanged(user: firebase.User | null): void {
+    if (user) {
+      this.props.setAuthState({
+        isAuthenticated: true,
+        displayName: user.displayName || undefined,
+        photoURL: user.photoURL || undefined
+      });
+    }
   }
 
   public componentWillUnmount() {
@@ -45,29 +61,19 @@ class LoginScreen extends React.Component<LoginScreenProps, LoginScreenState> {
         signInSuccessWithAuthResult: () => false
       }
     };
-    if (!this.state.isSignedIn) {
-      return (
-        <div className="LoginScreen">
-          <StyledFirebaseAuth
-            uiCallback={ui => ui.disableAutoSignIn()}
-            uiConfig={uiConfig}
-            firebaseAuth={firebase.auth()}
-          />
-        </div>
-      );
-    }
-
-    const currentUser = firebase.auth().currentUser;
-    const displayName = currentUser && currentUser.displayName;
-
     return (
-      <div>
-        <p>Welcome {displayName} !</p>
-
-        <Button onClick={() => firebase.auth().signOut()}>Sign out</Button>
+      <div className="LoginScreen">
+        <StyledFirebaseAuth
+          uiCallback={ui => ui.disableAutoSignIn()}
+          uiConfig={uiConfig}
+          firebaseAuth={firebase.auth()}
+        />
       </div>
     );
   }
 }
 
-export default LoginScreen;
+export default connect(
+  undefined,
+  mapDispatchToProps
+)(LoginScreen);
