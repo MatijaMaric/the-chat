@@ -37,7 +37,10 @@ class LoginScreen extends React.Component<LoginScreenProps, LoginScreenState> {
     const uiConfig = {
       signInFLow: "popup",
       signInSuccessUrl: "/signedIn",
-      signInOptions: [firebase.auth.GoogleAuthProvider.PROVIDER_ID],
+      signInOptions: [
+        firebase.auth.GoogleAuthProvider.PROVIDER_ID,
+        firebase.auth.GithubAuthProvider.PROVIDER_ID
+      ],
       callbacks: {
         signInSuccessWithAuthResult: () => false
       }
