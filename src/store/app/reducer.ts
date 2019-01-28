@@ -4,7 +4,7 @@ import { getType } from "typesafe-actions";
 import { initializeApp } from "./actions";
 
 const initialState: AppState = {
-  test: "test"
+  isAuthenticated: false
 };
 
 const reducer: Reducer<AppState, AppAction> = (
@@ -12,11 +12,6 @@ const reducer: Reducer<AppState, AppAction> = (
   action
 ) => {
   switch (action.type) {
-    case getType(initializeApp):
-      return {
-        ...state,
-        test: "burek"
-      };
     default:
       return state;
   }

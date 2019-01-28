@@ -5,7 +5,7 @@ import * as serviceWorker from "./serviceWorker";
 import { Provider } from "react-redux";
 import firebase from "./firebase";
 import { configureStore } from "./configureStore";
-import { App } from "./App";
+import { App } from "./containers/App/App";
 
 const store = configureStore();
 

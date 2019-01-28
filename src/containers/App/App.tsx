@@ -1,12 +1,13 @@
 import React from "react";
-import "./App.css";
-import { RootState, RootAction } from "./store";
+import "./App.scss";
+import { RootState, RootAction } from "../../store";
 import { connect } from "react-redux";
 import { Dispatch } from "redux";
-import { initializeApp } from "./store/app/actions";
+import { initializeApp } from "../../store/app/actions";
+import LoginScreen from "../LoginScreen/LoginScreen";
 
 export interface AppStateProps {
-  test: string;
+  isAuthenticated: boolean;
 }
 
 export interface AppDispatchProps {
@@ -17,7 +18,7 @@ export interface AppProps {}
 
 function mapStateToProps(state: RootState): AppStateProps {
   return {
-    test: state.app.test
+    isAuthenticated: state.app.isAuthenticated
   };
 }
 
@@ -28,12 +29,9 @@ function mapDispatchToProps(dispatch: Dispatch<RootAction>): AppDispatchProps {
 }
 
 class App extends React.Component<AppProps & AppStateProps & AppDispatchProps> {
-  render() {
-    return (
-      <div className="App" onClick={this.props.initializeApp}>
-        {this.props.test}
-      </div>
-    );
+  public render() {
+    const { isAuthenticated } = this.props;
+    return <div className="App">{!isAuthenticated && <LoginScreen />}</div>;
   }
 }
 
