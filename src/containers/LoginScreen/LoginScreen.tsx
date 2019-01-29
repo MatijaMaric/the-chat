@@ -9,6 +9,7 @@ import { RootAction } from "../../store";
 import { setAuthState } from "../../store/app/actions";
 import { User } from "../../common/models";
 import { connect } from "react-redux";
+import { Paper, Card, Typography } from "@material-ui/core";
 
 export interface LoginScreenProps {}
 
@@ -63,11 +64,19 @@ class LoginScreen extends React.Component<
     };
     return (
       <div className="LoginScreen">
-        <StyledFirebaseAuth
-          uiCallback={ui => ui.disableAutoSignIn()}
-          uiConfig={uiConfig}
-          firebaseAuth={firebase.auth()}
-        />
+        <Card>
+          <Typography
+            variant="h5"
+            style={{ textAlign: "center", marginTop: "20px" }}
+          >
+            Sign in
+          </Typography>
+          <StyledFirebaseAuth
+            uiCallback={ui => ui.disableAutoSignIn()}
+            uiConfig={uiConfig}
+            firebaseAuth={firebase.auth()}
+          />
+        </Card>
       </div>
     );
   }
