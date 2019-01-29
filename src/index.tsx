@@ -4,14 +4,20 @@ import "./index.css";
 import * as serviceWorker from "./serviceWorker";
 import { Provider } from "react-redux";
 import firebase from "./firebase";
-import { configureStore } from "./configureStore";
 import { App } from "./containers/App/App";
+import { CssBaseline, MuiThemeProvider } from "@material-ui/core";
+import configureTheme from "./configureTheme";
+import configureStore from "./configureStore";
 
 const store = configureStore();
+const theme = configureTheme();
 
 ReactDOM.render(
   <Provider store={store}>
-    <App />
+    <MuiThemeProvider theme={theme}>
+      <CssBaseline />
+      <App />
+    </MuiThemeProvider>
   </Provider>,
   document.getElementById("root")
 );

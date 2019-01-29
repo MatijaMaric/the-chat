@@ -4,7 +4,9 @@ import logger from "redux-logger";
 import thunk from "redux-thunk";
 import { RootState, rootReducer } from "./store";
 
-export function configureStore(initialState?: RootState): Store<RootState> {
+export default function configureStore(
+  initialState?: RootState
+): Store<RootState> {
   const middlewares: Array<Middleware> = [thunk];
 
   if (process.env.NODE_ENV !== "production") {

@@ -10,7 +10,9 @@ import firebase from "../../firebase";
 import { User } from "../../common/models";
 import AppBar from "@material-ui/core/AppBar";
 import Toolbar from "@material-ui/core/Toolbar";
-import { Avatar, Typography } from "@material-ui/core";
+import Avatar from "@material-ui/core/Avatar";
+import Typography from "@material-ui/core/Typography";
+import { withTheme } from "@material-ui/core";
 
 export interface AppStateProps {
   isAuthenticated: boolean;
@@ -42,27 +44,21 @@ function mapDispatchToProps(dispatch: Dispatch<RootAction>): AppDispatchProps {
 
 class App extends React.Component<AppProps & AppStateProps & AppDispatchProps> {
   public render() {
-    return this._renderAppBar();
-    if (this.props.isAuthenticated) {
-      return (
-        <div>
-          <span>Welcome {this.props.displayName}</span>
-          <Button onClick={this._handleSignOut}>Sign out</Button>
-        </div>
-      );
-    } else {
-      return (
-        <div>
-          <LoginScreen />
-        </div>
-      );
-    }
+    return (
+      <div className="App">
+        {this._renderAppBar()}
+        {!this.props.isAuthenticated && <LoginScreen />}
+      </div>
+    );
   }
 
   private _renderAppBar(): React.ReactNode {
     return (
       <AppBar position="static">
-        <Toolbar>{this._renderUserInfo()}</Toolbar>
+        <Toolbar className="Toolbar">
+          <div style={{ flexGrow: 1 }} />
+          {this._renderUserInfo()}
+        </Toolbar>
       </AppBar>
     );
   }
@@ -71,16 +67,17 @@ class App extends React.Component<AppProps & AppStateProps & AppDispatchProps> {
     if (this.props.isAuthenticated) {
       return (
         <>
-          <Typography color="inherit">{this.props.displayName}</Typography>
+          <Typography color="inherit" variant="button">
+            {this.props.displayName}
+          </Typography>
           <Avatar src={this.props.avatarURL} />
           <Button color="inherit" onClick={this._handleSignOut}>
             Sign out
           </Button>
         </>
       );
-    } else {
-      return <LoginScreen />;
     }
+    return null;
   }
 
   private _handleSignOut: React.MouseEventHandler<HTMLElement> = ev => {
@@ -94,5 +91,5 @@ class App extends React.Component<AppProps & AppStateProps & AppDispatchProps> {
 const appContainer = connect(
   mapStateToProps,
   mapDispatchToProps
-)(App);
+)(withTheme()(App));
 export { appContainer as App };
