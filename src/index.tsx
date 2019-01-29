@@ -5,19 +5,18 @@ import * as serviceWorker from "./serviceWorker";
 import { Provider } from "react-redux";
 import firebase from "./firebase";
 import { App } from "./containers/App/App";
-import { CssBaseline, MuiThemeProvider } from "@material-ui/core";
-import configureTheme from "./configureTheme";
+import { CssBaseline } from "@material-ui/core";
 import configureStore from "./configureStore";
+import ConnectedMuiThemeProvider from "./containers/ConnectedMuiThemeProvider/ConnectedMuiThemeProvider";
 
 const store = configureStore();
-const theme = configureTheme();
 
 ReactDOM.render(
   <Provider store={store}>
-    <MuiThemeProvider theme={theme}>
+    <ConnectedMuiThemeProvider>
       <CssBaseline />
       <App />
-    </MuiThemeProvider>
+    </ConnectedMuiThemeProvider>
   </Provider>,
   document.getElementById("root")
 );

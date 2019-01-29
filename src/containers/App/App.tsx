@@ -12,7 +12,12 @@ import AppBar from "@material-ui/core/AppBar";
 import Toolbar from "@material-ui/core/Toolbar";
 import Avatar from "@material-ui/core/Avatar";
 import Typography from "@material-ui/core/Typography";
+import Switch from "@material-ui/core/Switch";
 import { withTheme } from "@material-ui/core";
+import { setThemeOptions } from "../../store/theme/actions";
+import { ThemeOptions } from "@material-ui/core/styles/createMuiTheme";
+import { DarkTheme } from "../../themes/dark";
+import { LightTheme } from "../../themes/light";
 
 export interface AppStateProps {
   isAuthenticated: boolean;
@@ -23,9 +28,14 @@ export interface AppStateProps {
 export interface AppDispatchProps {
   initializeApp(): void;
   setAuthState(user: User): void;
+  setThemeOptions(theme: ThemeOptions): void;
 }
 
 export interface AppProps {}
+
+export interface AppState {
+  darkTheme: boolean;
+}
 
 function mapStateToProps(state: RootState): AppStateProps {
   return {
@@ -38,11 +48,22 @@ function mapStateToProps(state: RootState): AppStateProps {
 function mapDispatchToProps(dispatch: Dispatch<RootAction>): AppDispatchProps {
   return {
     initializeApp: () => dispatch(initializeApp()),
-    setAuthState: user => dispatch(setAuthState(user))
+    setAuthState: user => dispatch(setAuthState(user)),
+    setThemeOptions: theme => dispatch(setThemeOptions(theme))
   };
 }
 
-class App extends React.Component<AppProps & AppStateProps & AppDispatchProps> {
+class App extends React.Component<
+  AppProps & AppStateProps & AppDispatchProps,
+  AppState
+> {
+  public constructor(props: AppProps & AppStateProps & AppDispatchProps) {
+    super(props);
+    this.state = {
+      darkTheme: true
+    };
+  }
+
   public render() {
     return (
       <div className="App">
@@ -56,6 +77,10 @@ class App extends React.Component<AppProps & AppStateProps & AppDispatchProps> {
     return (
       <AppBar position="static">
         <Toolbar className="Toolbar">
+          <Switch
+            checked={this.state.darkTheme}
+            onChange={this._handleToggleTheme}
+          />
           <div style={{ flexGrow: 1 }} />
           {this._renderUserInfo()}
         </Toolbar>
@@ -79,6 +104,14 @@ class App extends React.Component<AppProps & AppStateProps & AppDispatchProps> {
     }
     return null;
   }
+
+  private _handleToggleTheme: React.ChangeEventHandler<
+    HTMLInputElement
+  > = ev => {
+    const isDarkTheme = ev.currentTarget.checked;
+    this.setState({ darkTheme: isDarkTheme });
+    this.props.setThemeOptions(isDarkTheme ? DarkTheme : LightTheme);
+  };
 
   private _handleSignOut: React.MouseEventHandler<HTMLElement> = ev => {
     firebase

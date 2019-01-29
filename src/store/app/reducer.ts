@@ -1,13 +1,14 @@
-import { AppState, AppAction } from "./types";
+import { AppState } from "./types";
 import { Reducer } from "redux";
 import { getType } from "typesafe-actions";
-import { initializeApp, setAuthState } from "./actions";
+import { setAuthState } from "./actions";
+import { RootAction } from "..";
 
 const initialState: AppState = {
   isAuthenticated: false
 };
 
-const reducer: Reducer<AppState, AppAction> = (
+const reducer: Reducer<AppState, RootAction> = (
   state = initialState,
   action
 ) => {
