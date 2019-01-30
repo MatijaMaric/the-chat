@@ -9,9 +9,12 @@ import { RootAction } from "../../store";
 import { setAuthState } from "../../store/app/actions";
 import { User } from "../../common/models";
 import { connect } from "react-redux";
-import { Paper, Card, Typography } from "@material-ui/core";
+import { Paper, Card, Typography, CircularProgress } from "@material-ui/core";
 
 export interface LoginScreenProps {}
+export interface LoginScreenState {
+  isLoading: boolean;
+}
 
 export interface LoginScreenDispatchProps {
   setAuthState(user: User): void;
@@ -26,9 +29,17 @@ function mapDispatchToProps(
 }
 
 class LoginScreen extends React.Component<
-  LoginScreenProps & LoginScreenDispatchProps
+  LoginScreenProps & LoginScreenDispatchProps,
+  LoginScreenState
 > {
   private unregisterAuthObserver: firebase.Unsubscribe = () => null;
+
+  public constructor(props: LoginScreenProps & LoginScreenDispatchProps) {
+    super(props);
+    this.state = {
+      isLoading: true
+    };
+  }
 
   public componentDidMount() {
     this.unregisterAuthObserver = firebase
@@ -59,7 +70,10 @@ class LoginScreen extends React.Component<
         firebase.auth.GithubAuthProvider.PROVIDER_ID
       ],
       callbacks: {
-        signInSuccessWithAuthResult: () => false
+        signInSuccessWithAuthResult: () => false,
+        uiShown: () => {
+          this.setState({ isLoading: false });
+        }
       }
     };
     return (
@@ -71,6 +85,16 @@ class LoginScreen extends React.Component<
           >
             Sign in
           </Typography>
+          {this.state.isLoading && (
+            <CircularProgress
+              color="secondary"
+              style={{
+                margin: "20px 0 20px 0",
+                position: "relative",
+                left: "calc(50% - 20px)"
+              }}
+            />
+          )}
           <StyledFirebaseAuth
             uiCallback={ui => ui.disableAutoSignIn()}
             uiConfig={uiConfig}
