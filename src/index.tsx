@@ -3,11 +3,10 @@ import ReactDOM from "react-dom";
 import "./index.css";
 import * as serviceWorker from "./serviceWorker";
 import { Provider } from "react-redux";
-import firebase from "./firebase";
-import { App } from "./containers/App/App";
 import { CssBaseline } from "@material-ui/core";
-import configureStore from "./configureStore";
+import configureStore from "./store/configureStore";
 import ConnectedMuiThemeProvider from "./containers/ConnectedMuiThemeProvider/ConnectedMuiThemeProvider";
+import App from "./containers/App/App";
 
 const store = configureStore();
 

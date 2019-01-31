@@ -1,9 +1,7 @@
 import React from "react";
 
 import "./LoginScreen.scss";
-
 import StyledFirebaseAuth from "react-firebaseui/StyledFirebaseAuth";
-import firebase from "../../firebase";
 import { Dispatch } from "redux";
 import { RootAction } from "../../store";
 import { setAuthState } from "../../store/app/actions";
@@ -12,6 +10,7 @@ import { connect } from "react-redux";
 import Card from "@material-ui/core/Card";
 import Typography from "@material-ui/core/Typography";
 import CircularProgress from "@material-ui/core/CircularProgress";
+import firebase from "../../firebase";
 
 export interface LoginScreenProps {}
 export interface LoginScreenState {
